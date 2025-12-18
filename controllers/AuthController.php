@@ -1,9 +1,10 @@
 <?php
+require_once __DIR__ . '/../models/Usuario.php';
 
 class AuthController
 {
     private $userModel;
-    private $timeout = 900; // 15 minutos
+    private $timeout = 7200; // 2 horas
 
     public function __construct()
     {
@@ -15,7 +16,7 @@ class AuthController
         if (!isset($_SESSION['csrf_token'])) {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }
-        include 'views/login.php';
+        include __DIR__ . '/../views/login.php';
     }
 
     public function authenticate()
@@ -29,7 +30,7 @@ class AuthController
             exit();
         }
 
-        // Límite de intentos
+        // Intentos de acceso
         $_SESSION['intentos'] = $_SESSION['intentos'] ?? 0;
         if ($_SESSION['intentos'] >= 5) {
             $_SESSION['error'] = "Demasiados intentos fallidos.";
@@ -47,9 +48,13 @@ class AuthController
             session_regenerate_id(true);
 
             $_SESSION['idusuario'] = $user['idusuario'];
+            $_SESSION['nombre'] = $user['nombre'];
+            $_SESSION['apellidos'] = $user['apellidos'];
             $_SESSION['login_time'] = time();
-            $_SESSION['session_token'] = bin2hex(random_bytes(32));
             $_SESSION['intentos'] = 0;
+
+            // Token de sesión
+            $_SESSION['session_token'] = bin2hex(random_bytes(32));
 
             header("Location: index.php?action=dashboard");
             exit();
@@ -63,21 +68,16 @@ class AuthController
 
     public function dashboard()
     {
-        if (
-            !isset($_SESSION['idusuario']) ||
-            !isset($_SESSION['login_time']) ||
-            (time() - $_SESSION['login_time']) > $this->timeout
-        ) {
+        if (!isset($_SESSION['idusuario']) || !isset($_SESSION['login_time']) ||
+            (time() - $_SESSION['login_time']) > $this->timeout) {
             $this->logout();
         }
-
-        include 'views/dashboard.php';
+        include __DIR__ . '/../views/dashboard.php';
     }
 
     public function logout()
     {
         $_SESSION = [];
-
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
             setcookie(session_name(), '', time() - 42000,
@@ -85,7 +85,6 @@ class AuthController
                 $params["secure"], $params["httponly"]
             );
         }
-
         session_destroy();
         header("Location: index.php");
         exit();

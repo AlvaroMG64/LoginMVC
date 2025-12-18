@@ -20,7 +20,8 @@ class Usuario
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user && password_verify($password, $user['password'])) {
+        // Comparación directa de texto plano
+        if ($user && $password === $user['password']) {
             return $user;
         }
         return false;
