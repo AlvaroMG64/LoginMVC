@@ -1,36 +1,40 @@
-<?php
-// views/login.php
-session_start();
-if (isset($_SESSION['usuario_logueado'])) {  // si el usuario estuviera ya logeado, lo derivamos al inicio interno
-    header("Location: ./dashboard.php");    // nosotros haremos comprobación de token
-    exit();
-}
-?>
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
     <title>Login</title>
+    <script src="public/js/validaciones.js" defer></script>
 </head>
 
 <body>
-    <!-- aquí podríamos hacer un include de una cabecera común, si la hubiera, que incluyera incluso todas las etiquetas HTML anteriores -->
 
-    <h1>Iniciar Sesión</h1>
-    <?php
-    if (isset($_GET['error'])) {
-        echo '<p style="color: red;">' . $_GET['error'] . "</p>";       
-        unset($_GET['error']);
-    }
-    ?>
-    <form action="index.php?action=authenticate" method="POST">
-        <input type="idusuario" name="idusuario" placeholder="Identificador Usuario" required><br><br>
-        <input type="password" name="password" placeholder="Contraseña" required><br><br>
-        <button type="submit" name="login">Ingresar</button>
+<div class="login-card">
+    <h1>Iniciar sesión</h1>
+
+    <form method="post" action="index.php?action=authenticate">
+
+        <?php
+        if (!empty($_SESSION['error'])) {
+            echo "<div class='alert alert-danger'>{$_SESSION['error']}</div>";
+            unset($_SESSION['error']);
+        }
+        ?>
+
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+
+        <div>
+            <label>Nombre de usuario</label>
+            <input type="text" name="identificador" id="identificador" required>
+        </div>
+
+        <div>
+            <label>Contraseña</label>
+            <input type="password" name="password" id="password" required>
+        </div>
+
+        <button type="submit">Acceder</button>
     </form>
-    
-    <!-- aquí podríamos hacer un include de un pie común, si lo hubiera, que incluyera incluso todas las etiquetas HTML posteriores -->
-    
-</body>
+</div>
 
+</body>
 </html>

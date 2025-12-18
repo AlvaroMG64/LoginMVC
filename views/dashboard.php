@@ -1,18 +1,14 @@
-<?php
-// views/login.php
-session_start();        // habría que comprobar que hay token de sesion
-?>
+<!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
 </head>
 
 <body>
-    <h2>Bienvenido al Dashboard, <?php echo $_SESSION['idusuario'] ?></h2>
-    <p>Has iniciado sesión correctamente</p>
-    <a href="index.php?route=login">Cerrar sesión (Volver al login)</a>
-</body>
+    <h2>Bienvenido, <?= htmlspecialchars($_SESSION['idusuario']) ?></h2>
+    <p>Sesión iniciada correctamente</p>
 
+    <a href="index.php?action=logout">Cerrar sesión</a>
+</body>
 </html>
