@@ -138,3 +138,9 @@ Este proyecto cumple **íntegramente** el enunciado propuesto por la profesora:
 7. Iniciar sesión con los usuarios definidos en la base de datos.
 
 ---
+
+## ✍️ Autoría
+
+**Autor:** Álvaro Mozo Gaspar
+
+---
