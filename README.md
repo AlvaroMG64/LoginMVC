@@ -13,6 +13,33 @@ La aplicación permite iniciar sesión a usuarios existentes almacenados en base
 
 El proyecto se organiza siguiendo una estructura MVC sencilla, separando responsabilidades y facilitando el mantenimiento del código:
 
+```
+LoginMVC/
+│
+├── config/
+│   └── Database.php
+│
+├── controllers/
+│   └── AuthController.php
+│
+├── models/
+│   └── Usuario.php
+│
+├── views/
+│   ├── login.php
+│   └── dashboard.php
+│
+├── public/
+│   └── js/
+│       └── validaciones.js
+│
+├── sql/
+│   └── usuarios.sql
+│
+├── generar_insert_hash.php
+└── index.php
+```
+
 LoginMVC  
 - **index.php** → Punto de entrada único (Front Controller)  
 - **generar_insert_hash.php** → Script PHP para generar INSERTs con contraseñas cifradas  
