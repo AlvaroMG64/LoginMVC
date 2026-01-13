@@ -14,16 +14,16 @@ class Usuario
 
     public function login($identificador, $password)
     {
-        $sql = "SELECT * FROM {$this->tabla} WHERE idusuario = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->tabla} WHERE idusuario = ? AND admitido = 1 LIMIT 1";
         $stmt = $this->PDO->prepare($sql);
         $stmt->execute([$identificador]);
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Comparación directa de texto plano
-        if ($user && $password === $user['password']) {
+        if ($user && password_verify($password, $user['password'])) {
             return $user;
         }
+
         return false;
     }
 }
